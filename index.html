@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Median Expenses Calculation</title>
+</head>
+<body>
+
+<script>
+// Function to calculate the median for expenses from the first week
+function get_median_of_first_week_expenses(expenses) {
+
+    // Variables
+    const result = [];
+    const maxDaysFirstWeek = 7
+    const dayOfWeekSunday = 0
+
+    // Iterating through months
+    Object.keys(expenses).forEach(month => {
+        // Iterating through days in the month
+
+        Object.keys(expenses[month]).forEach(day => {
+
+            // Checking if the day belongs to the first week
+            if (Number(day) <= maxDaysFirstWeek) {
+
+                // Getting the day of the week for the given day
+                const dayOfWeek = new Date(`${month}-${day}`).getDay();
+
+                // Checking if it's a Sunday or the day of the month is greater or equal than the day of the week
+                if (dayOfWeek === dayOfWeekSunday || dayOfWeek >= Number(day)) {
+
+                    // Iterating through expense categories
+                    for (const category in expenses[month][day]) {
+
+                        // Getting values for the given category and adding to results
+                        const categoryValues = expenses[month][day][category];
+
+                        if (categoryValues.length > 0) {
+                            result.push(...categoryValues);
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    // for (const month in expensesData) {
+
+    //     for (day in expensesData[month]){
+
+    //         if (parseInt(day) <= 7) {
+
+    //             let dayOfWeek = new Date(month + "-" + day).getDay()
+
+    //             if (0 == dayOfWeek || dayOfWeek >= parseInt(day)) {
+
+    //                 for (const category in expensesData[month][day]) {
+    //                     if (expenses[month][day][category].length > 0) {
+
+    //                         allValues = allValues.concat(expensesData[month][day][category]);
+    //                     }
+    //                 }   
+    //             }
+    //         }
+    //     }
+    // }
+
+    // Calculating the median and returning the result
+    return calculateMedian(result);
+}
+
+// Function to calculate the median for all collected values 
+function calculateMedian(array) {
+
+    // Sort array and getting index of the middle element
+    const sortedArray = array.slice().sort((a, b) => a - b);
+    const middle = Math.floor(sortedArray.length / 2);
+
+    // Checking if the number of elements is even or odd, then calculating median
+    if (sortedArray.length % 2 === 0) {
+
+        return (sortedArray[middle - 1] + sortedArray[middle]) / 2;
+
+    } else {
+
+        return sortedArray[middle];
+
+    }
+}
+
+// Sample input data
+expenses = {
+    "2023-01": {
+        "01": {
+            "food": [ 22.11, 43, 11.72, 2.2, 36.29, 2.5, 19 ],
+            "fuel": [ 210.22 ]
+        },
+        "09": {
+            "food": [ 11.9 ],
+            "fuel": [ 190.22 ]
+        }
+    },
+    "2023-03": {
+        "07": {
+            "food": [ 20, 11.9, 30.20, 11.9 ]
+        },
+        "04": {
+            "food": [ 10.20, 11.50, 2.5 ],
+            "fuel": []
+        }
+    },
+    "2023-04": {}
+}
+
+// Calling function and display result in the console
+console.log(get_median_of_first_week_expenses(expenses));
+</script>
+
+</body>
+</html>
